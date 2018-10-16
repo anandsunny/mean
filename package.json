@@ -1,0 +1,27 @@
+{
+  "name": "mean",
+  "version": "1.0.0",
+  "description": "simple mean app",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anandsunny/mean.git"
+  },
+  "author": "anand panwar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anandsunny/mean/issues"
+  },
+  "homepage": "https://github.com/anandsunny/mean#readme",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.3.0",
+    "mongoose": "^5.3.4"
+  }
+}
