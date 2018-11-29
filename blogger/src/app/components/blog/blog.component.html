@@ -1,0 +1,25 @@
+
+<a mat-raised-button [routerLink]="['create']" color="primary" ><mat-icon>add_circle_outline</mat-icon> Create New</a>
+
+<mat-grid-list cols="3" >
+  <mat-grid-tile class="blog_tiles" colspan="1" *ngFor="let blog of blogs">
+    <mat-card class="example-card">
+      <mat-card-header>
+        <div mat-card-avatar class="example-header-image"></div>
+        <mat-card-title>{{ blog.createdBy | titlecase }}</mat-card-title>
+        <mat-card-subtitle>{{ blog.createdAt | date : 'dd LLL' }}</mat-card-subtitle>
+      </mat-card-header>
+      <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+      <mat-card-content>
+        <h3>{{ (blog.title.length > 30) ? (blog.title | slice:0:30)+'...' : (blog.title) }}</h3>
+      </mat-card-content>
+      <mat-card-actions class="mat_action">
+        <mat-icon >favorite_border</mat-icon> <span class="likes">{{ blog.likes }}</span>
+        <span class="authButtons">
+        <button mat-icon-button color="accent"><mat-icon *ngIf="userName === blog.createdBy">create</mat-icon></button>
+        <button mat-icon-button color="warn"><mat-icon *ngIf="userName === blog.createdBy">delete</mat-icon></button>
+        </span>
+      </mat-card-actions>
+    </mat-card>
+  </mat-grid-tile>
+</mat-grid-list>

@@ -115,14 +115,9 @@ userSchema.pre('save', function(next) {
         if (err) 
             return next(err);
         this.pass = hash;
-        console.log(err, hash);
         next();
     })    
 });
 
-
-// userSchema.methods.comparePass = functuion(pass) {
-//     return bcryptNodejs.compareSync(pass, this.pass);
-// }
 
 module.exports = mongoose.model('User', userSchema);

@@ -1,0 +1,19 @@
+.example-card {
+  margin: 10px;
+}
+.blog_tiles {
+  height: 100%;
+}
+.example-header-image {
+  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+  background-size: cover;
+}
+.mat_action {
+  position: relative;
+}
+.mat_action .likes {
+  position: absolute;
+  top: 12px; left: 28px;
+  font-size: 13px;
+}
+.authButtons { float: right; margin-top: -12px; }

@@ -1,0 +1,24 @@
+<div class="outer_div">
+  <mat-card class="form_align">
+    <h2>Log-In</h2>
+    <mat-divider></mat-divider>
+    <form [formGroup]="myForm" (ngSubmit)="login()">
+      <div [ngClass]="msgClass" *ngIf="notif">
+        {{ msg }}
+      </div>
+      <mat-form-field class="ip_field">
+        <input type="text" matInput placeholder="User-name" formControlName="uname" />
+      </mat-form-field>
+      <ul class="err_ul">
+        <li class="txt_danger" *ngIf="myForm.controls.uname.errors?.required && myForm.controls.uname.dirty">User-name is required</li>
+      </ul>
+      <mat-form-field class="ip_field">
+        <input type="password" matInput placeholder="Password" formControlName="pass" />
+      </mat-form-field>
+      <ul class="err_ul">
+        <li class="txt_danger" *ngIf="myForm.controls.pass.errors?.required && myForm.controls.pass.dirty">Password is required</li>
+      </ul>
+      <button mat-raised-button color="primary" [disabled]="myForm.invalid || processing">Log-In</button>
+    </form>
+  </mat-card>
+</div>

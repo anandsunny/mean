@@ -1,0 +1,11 @@
+a { font-weight: bolder; margin-left: 20px; text-transform: uppercase }
+
+.main_navbar {
+    max-width: 100%;
+    width: 80%;
+    margin: auto;
+}
+mat-toolbar {
+    border: 1px solid #f1e4e4;
+    background: white
+}

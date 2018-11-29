@@ -1,0 +1,42 @@
+<div id="create_blog">
+  <mat-card>
+    <form [formGroup]="myForm" (ngSubmit)="saveBlog()">
+      <mat-form-field class="ip_field">
+        <input matInput 
+        formControlName="title"
+        placeholder="Title" />
+      </mat-form-field>
+      <ul class="err_ul">
+        <li class="txt_danger" 
+        *ngIf="myForm.get(title).dirty && myForm.get(title).errors?.required">
+            Title field is required.
+        </li>
+        <li class="txt_danger" 
+        *ngIf="(myForm.controls.title.dirty && myForm.controls.title.errors?.minlength) || myForm.controls.dirty && myForm.controls.title.errors?.maxlength">
+            Max length 50, Min length 5
+        </li>
+        <li class="txt_danger" 
+        *ngIf="myForm.controls.title.dirty && myForm.controls.title.errors?.alphaNumericValidation">
+          Must be a letter or number
+        </li>
+    </ul>
+      <mat-form-field class="ip_field">
+        <textarea matInput
+        cols="30" rows="10" 
+        formControlName="body"
+        placeholder="Blog Body"></textarea>
+      </mat-form-field>
+      <ul class="err_ul">
+        <li class="txt_danger" *ngIf="myForm.controls.body.dirty && myForm.controls.body.errors?.required">
+            Body field is required.
+        </li>
+        <li class="txt_danger" *ngIf="(myForm.controls.body.dirty && myForm.controls.body.errors?.minlength) || (myForm.controls.body.dirty && myForm.controls.body.errors?.maxlength)">
+            Max length 500, Min length 5
+        </li>
+    </ul>
+      <button mat-raised-button color="accent"  (click)="goBack()">Go Back</button> &nbsp;&nbsp;
+      <button type="submit" mat-raised-button color="primary">Save</button>
+    </form>
+  </mat-card>
+</div>
+
