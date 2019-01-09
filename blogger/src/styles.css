@@ -22,3 +22,13 @@ a { text-decoration: none }
     font-size: 15px;
     list-style-type: none;
 }
+.hide { display: none; }
+ div[class*='col_'] {
+    display: inline-block;
+}
+.col_3 {
+    width: 33.33%;
+}
+div.col_2 { width: 20% }
+div.col_8 { width: 80% }
+

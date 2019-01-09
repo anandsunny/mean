@@ -54,7 +54,9 @@ export class AuthService {
   // create headers for auth request's
   authHeaders() {
     this.loadToken();
+    // headers.append('enctype', 'multipart/form-data');
     this.headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
+    // this.headers = this.headers.set('enctype', 'multipart/form-data');
     if(this.authToken)
       this.headers = this.headers.set('authtoken', this.authToken);
   }

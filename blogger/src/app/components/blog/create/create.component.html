@@ -4,39 +4,75 @@
       <mat-form-field class="ip_field">
         <input matInput 
         formControlName="title"
-        placeholder="Title" />
+        placeholder="Title"
+        (blur)="logValidationErrors()"
+         />
       </mat-form-field>
-      <ul class="err_ul">
-        <li class="txt_danger" 
-        *ngIf="myForm.get(title).dirty && myForm.get(title).errors?.required">
-            Title field is required.
-        </li>
-        <li class="txt_danger" 
-        *ngIf="(myForm.controls.title.dirty && myForm.controls.title.errors?.minlength) || myForm.controls.dirty && myForm.controls.title.errors?.maxlength">
-            Max length 50, Min length 5
-        </li>
-        <li class="txt_danger" 
-        *ngIf="myForm.controls.title.dirty && myForm.controls.title.errors?.alphaNumericValidation">
-          Must be a letter or number
-        </li>
-    </ul>
+      <span class="txt_danger" *ngIf="formErrors.title">
+        {{ formErrors.title }}
+      </span>
+      
       <mat-form-field class="ip_field">
         <textarea matInput
         cols="30" rows="10" 
         formControlName="body"
-        placeholder="Blog Body"></textarea>
+        placeholder="Blog Body"
+        (blur)="logValidationErrors()"
+        ></textarea>
       </mat-form-field>
-      <ul class="err_ul">
-        <li class="txt_danger" *ngIf="myForm.controls.body.dirty && myForm.controls.body.errors?.required">
-            Body field is required.
-        </li>
-        <li class="txt_danger" *ngIf="(myForm.controls.body.dirty && myForm.controls.body.errors?.minlength) || (myForm.controls.body.dirty && myForm.controls.body.errors?.maxlength)">
-            Max length 500, Min length 5
-        </li>
-    </ul>
-      <button mat-raised-button color="accent"  (click)="goBack()">Go Back</button> &nbsp;&nbsp;
-      <button type="submit" mat-raised-button color="primary">Save</button>
+      <span class="txt_danger" *ngIf="formErrors.body">
+        {{ formErrors.body }}
+      </span>
+      
+  
+      <div class="file_div">
+        <div class="file_div_inner">
+          <input class="hide" 
+        #blogImg formControlName="blogImg" 
+        type="file" id="cover" (change)="takeImg($event)" />
+        <button
+          type="button" 
+          [ngClass]="{'fileBtn': (serverImgPath || clientImgPath)}"
+          mat-stroked-button 
+          color="primary" 
+          (click)="blogImg.click()" >Choose Cover Image</button>
+        </div>
+        <div class="file_div_inner">
+          <!-- <img src="assets/noImage.png" width="100px" height="100px" *ngIf="blogImgName === ''" alt="image" /> -->
+          <img [src]="serverImgPath" width="100px" *ngIf="serverImgPath" height="100px"  alt="image" />
+          <img [src]="clientImgPath" width="100px" *ngIf="clientImgPath" height="100px"  alt="image" />
+        </div>
+      </div>
+        <span class="txt_danger" *ngIf="formErrors.blogImg">
+          {{ formErrors.blogImg }}
+        </span>
+        <br>
+          <button type="button"  mat-raised-button color="accent"  (click)="goBack()">Go Back</button> &nbsp;&nbsp;
+          <button type="submit" mat-raised-button color="primary" [disabled]="myForm.invalid" >Save</button>
     </form>
   </mat-card>
 </div>
+<table border="1">
+  <thead>
+    <tr><th>Status</th><th>Form</th><th>Control</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Valid</td>
+      <td>{{ myForm.valid }}</td>
+      <td>{{ myForm.controls.title.valid }}</td>
+    </tr>
+    <tr>
+      <td>Touched</td>
+      <td>{{ myForm.touched }}</td>
+      <td>{{ myForm.controls.title.touched }}</td>
+    </tr>
+    <tr>
+      <td>dirty</td>
+      <td>{{ myForm.dirty }}</td>
+      <td>{{ myForm.controls.title.dirty }}</td>
+    </tr>
+  </tbody>
+</table>
+{{ myForm.value|json }}
 

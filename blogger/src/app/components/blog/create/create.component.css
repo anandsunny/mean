@@ -4,3 +4,16 @@
 }
 
 .ip_field { width: 100%; }
+
+.err_ul {
+    margin-bottom: 16px;
+}
+.file_div .file_div_inner {
+    display: inline-block;
+}
+.file_div .file_div_inner > img {
+    padding-left: 30px;
+}
+.fileBtn {
+    transform: translateY(-54px);
+}

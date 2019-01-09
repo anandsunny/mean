@@ -1,0 +1,23 @@
+.row { margin-top: 30px;  }
+.auther_details {
+    font-size: 14px;
+    color: #242527;
+    font-weight: 800;
+}
+.p_date { font-size: 13px; }
+.blog_body {
+    display: flex;
+    margin-top: 20px;
+}
+.blog_body .col_8 {
+    padding-top: 10px;
+    line-height: 25px;
+    color: #7b6d6d;
+    font-size: 16px;
+}
+.mat-raised-button{
+    font-size: 12px;
+    line-height: 26px;
+    padding: 0 11px;
+}
+#edit_btn { margin-right: 10px; }

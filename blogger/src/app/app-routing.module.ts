@@ -12,16 +12,14 @@ import { AuthGuard } from './guards/auth.guard';
 import { NotAuthGuard } from './guards/not-auth.guard';
 import { BlogComponent } from './components/blog/blog.component';
 import { CreateComponent } from './components/blog/create/create.component';
+import { SingleBlogComponent } from './components/blog/single-blog/single-blog.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'login', component: LoginComponent, canActivate: [NotAuthGuard] },
   { path: 'signUp', component: RegisterComponent, canActivate: [NotAuthGuard] },
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
-  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
-  { path: 'blogs', component: BlogComponent, canActivate: [AuthGuard] },
-  { path: 'blogs/create', component: CreateComponent, canActivate: [AuthGuard] },
-  { path: '**', component: NotFoundComponent  }
+  { path: 'auth', loadChildren: './modules/auth/auth.module#AuthModule' },
+  { path: '**', component: NotFoundComponent }
 ];
 
 @NgModule({

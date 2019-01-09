@@ -1,9 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { GetBlogsService } from '../../../services/get-blogs.service';
+import { Component, OnInit, Inject } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { BlogService } from '../../../services/blog.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AuthService } from '../../../services/auth.service';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { CommonService } from '../../../services/common.service';
+import { IBlog } from '../../../interfaces/blog';
+import { CustomValidators } from './../../../shared/custom-validators';
 
 @Component({
   selector: 'app-create',
@@ -13,47 +18,126 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class CreateComponent implements OnInit {
 
   myForm: FormGroup;
-  processing: Boolean = false;
-  username: String;
+  processing: boolean = false;
+  username;
+  clientImgPath: string = '';
+  serverImgPath: string = '';
+  fileExtErr: string;
+  selectedFile: File = null;
+  // blog: Blog = new Blog();
+  blog: any;
+  blogId: string;
+
+  validationMessages = {
+    'title': {
+      'required': 'Title is required.',
+      'minlength': 'Title must be greater than 2 characters.',
+      'maxlength': 'Title must be less than 10 characters.',
+      'alphaNumericValidation': 'Title must be charecters.'
+    },
+    'body': {
+      'required': 'Blog Body is required.',
+      'minlength': 'Max length 500, Min length 5',
+      'maxlength': 'Max length 500, Min length 5'
+    },
+    'blogImg': {
+      'required': 'Blog-Image is required.',
+      'validateFile': 'Blog-Image must be an image'
+    }
+  };
+
+  formErrors = {};
 
   constructor(
     private _formBuilder: FormBuilder,
-    private _blogService: GetBlogsService,
+    private _blogService: BlogService,
     private _flashMessagesService: FlashMessagesService,
-    private _router: Router
+    private _router: Router,
+    private _actRoute: ActivatedRoute,
+    private _authService: AuthService,
+    private _commonService: CommonService
+
   ) { }
 
   ngOnInit() {
     this.createControls();
-    this.username = JSON.parse(localStorage.getItem('user'));
+    this.username = JSON.parse(localStorage.getItem('user')).username;
+
+    // validation fire on field value change
+    this.myForm.valueChanges.subscribe(() => {
+      this.logValidationErrors(this.myForm);
+    });
+
+    // get blog id to url
+    this._actRoute.paramMap.subscribe((param: any) => {
+      this.blogId = param.params.id;
+      if (this.blogId) {
+        this.getBlog(this.blogId);
+      }
+    })
+  }
+
+
+  // take image to input file
+  takeImg(event) {
+    this.selectedFile = event.target.files[0];
+    this.serverImgPath = '';
+    let imgControl = this.myForm.get('blogImg');
+    imgControl.setValidators([Validators.required, CustomValidators.validateSingleInput(/(jpg|png|gif|bmp)$/i)]);
+    imgControl.updateValueAndValidity();
+
+    if( (event.target.files && event.target.files[0]) && (imgControl.valid) ) {
+      const reader = new FileReader();
+      reader.onload = (event: ProgressEvent) => {
+        this.clientImgPath = (<FileReader>event.target).result;
+      }
+      reader.readAsDataURL(event.target.files[0]);
+    } 
+  }
+
+  // get blog by id
+  getBlog(id) {
+    this._blogService.blog(id).subscribe((blog: any) => {
+      this.editBlog(blog.blog[0]);
+    }, err => console.log(err));
+  }
+
+  // edit blog
+  editBlog(blog: IBlog) {
+    this.myForm.patchValue({
+      title: blog.title,
+      body: blog.body
+    });
+    
+    this.serverImgPath = 'http://localhost:3000/img/' + blog.blogImg;
+    if (this.clientImgPath.length == 0) {
+      let imgControl = this.myForm.get('blogImg');
+      imgControl.clearValidators();
+      imgControl.updateValueAndValidity();
+    }
   }
 
   // create form controls
   createControls() {
     this.myForm = this._formBuilder.group({
-      title: ['', Validators.compose([
+      title: ['', [
         Validators.required,
         Validators.maxLength(50),
         Validators.minLength(5),
-        this.alphaNumericValidation
-      ])],
-      body: ['', Validators.compose([
+        CustomValidators.alphaNumericValidation
+      ]],
+      body: ['', [
         Validators.required,
-        Validators.maxLength(500),
-        Validators.minLength(5)
-      ])]
+        Validators.minLength(5),
+        Validators.maxLength(500)]
+      ],
+      blogImg: ['', [
+        Validators.required,
+        CustomValidators.validateSingleInput(/(jpg|png|gif|bmp)$/i)
+      ]]
     })
   }
 
-  // validation for title
-  alphaNumericValidation(control) {
-    const regExp = new RegExp(/^[a-zA-Z0-9 ]+$/);
-
-    if (regExp.test(control.value))
-      return null;
-    else
-      return { 'alphaNumericValidation': true };
-  }
 
   // enable Form
   formEnable() {
@@ -68,28 +152,65 @@ export class CreateComponent implements OnInit {
   }
 
   saveBlog() {
+    // this.formDisable();
     this.processing = true;
-    this.formDisable();
-    
-    const blog = {
-      title: this.myForm.get('title').value,
-      body: this.myForm.get('body').value,
-      createdBy: this.username,
+    const fd: FormData = new FormData();
+    fd.append('title', this.myForm.get('title').value);
+    fd.append('body', this.myForm.get('body').value);
+    fd.append('createdBy', this.username);
+    if (this.selectedFile != null) {
+      fd.append('blogImg', this.selectedFile, this.selectedFile.name);
     }
+    
+    // console.log(this.selectedFile, this.myForm)
 
-    // funtion to save data into database
-    this._blogService.newBlog(blog).subscribe((data: any) => {
-        this._flashMessagesService.show(data.message, {cssClass: 'alert_success'});
-        setTimeout(() => {
-          this.processing = false;
-          this.formEnable();
-          this._router.navigate(['/blogs']);
-        }, 2000);
-    }, (err: HttpErrorResponse) => {
-      this._flashMessagesService.show(err.error.message, {cssClass: 'alert_danger'});
-      this.processing = false;
-      this.formEnable();
+    if (this.blogId) {
+      this._blogService.edit(this.blogId, fd).subscribe((data: any) => {
+        this.onSubmitCommon('Blog edited.');
+
+      }, err => console.log(err));
+    } else {
+      this._blogService.newBlog(fd).subscribe((data: any) => {
+        this.onSubmitCommon('New blog saved.');
+      }, err => console.log(err));
+    }
+  }
+
+  onSubmitCommon(msg) {
+    this._flashMessagesService.show(msg, { cssClass: 'alert_success' });
+    this.processing = false;
+    this.formEnable();
+    this._router.navigate(['blogs']);
+  }
+
+  // back button
+  goBack() {
+    this._router.navigate(['blogs']);
+  }
+
+
+  // log validations
+  logValidationErrors(group: FormGroup = this.myForm): void {
+    Object.keys(group.controls).forEach((key: string) => {
+      const abstractControl = group.get(key);
+
+      this.formErrors[key] = '';
+      if (abstractControl && !abstractControl.valid && (abstractControl.dirty || abstractControl.touched)) {
+        const message = this.validationMessages[key];
+        for (const errorKey in abstractControl.errors) {
+          if (errorKey) {
+            this.formErrors[key] += message[errorKey] + ' ';
+          }
+        }
+      }
+
+      if (abstractControl instanceof FormGroup) {
+        this.logValidationErrors(abstractControl);
+      }
+
     })
   }
 
 }
+
+

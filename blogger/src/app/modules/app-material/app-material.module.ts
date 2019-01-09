@@ -10,7 +10,9 @@ import {
   MatSnackBarModule,
   MatDividerModule,
   MatListModule,
-  MatBadgeModule
+  MatBadgeModule,
+  MatDialogModule,
+  MatSidenavModule
 } from '@angular/material';
 
 
@@ -27,7 +29,9 @@ import {
     MatSnackBarModule,
     MatDividerModule,
     MatListModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatDialogModule,
+    MatSidenavModule
   ],
   exports: [
     MatToolbarModule,
@@ -39,8 +43,9 @@ import {
     MatSnackBarModule,
     MatDividerModule,
     MatListModule,
-    MatBadgeModule
-    
+    MatBadgeModule,
+    MatDialogModule,
+    MatSidenavModule
   ]
 })
 export class AppMaterialModule { }
