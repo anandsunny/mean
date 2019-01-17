@@ -20,7 +20,7 @@ export class CreateComponent implements OnInit {
   myForm: FormGroup;
   processing: boolean = false;
   username;
-  clientImgPath: string = '';
+  clientImgPath: any;
   serverImgPath: string = '';
   fileExtErr: string;
   selectedFile: File = null;
@@ -88,11 +88,11 @@ export class CreateComponent implements OnInit {
 
     if( (event.target.files && event.target.files[0]) && (imgControl.valid) ) {
       const reader = new FileReader();
-      reader.onload = (event: ProgressEvent) => {
-        this.clientImgPath = (<FileReader>event.target).result;
+      reader.onload = (e: ProgressEvent) => {
+        this.clientImgPath = (<FileReader>e.target).result;
       }
       reader.readAsDataURL(event.target.files[0]);
-    } 
+    }
   }
 
   // get blog by id
@@ -110,7 +110,7 @@ export class CreateComponent implements OnInit {
     });
     
     this.serverImgPath = 'http://localhost:3000/img/' + blog.blogImg;
-    if (this.clientImgPath.length == 0) {
+    if (!this.clientImgPath) {
       let imgControl = this.myForm.get('blogImg');
       imgControl.clearValidators();
       imgControl.updateValueAndValidity();
@@ -161,31 +161,31 @@ export class CreateComponent implements OnInit {
     if (this.selectedFile != null) {
       fd.append('blogImg', this.selectedFile, this.selectedFile.name);
     }
-    
-    // console.log(this.selectedFile, this.myForm)
+    console.log(fd);
+    // // blog edit
+    // if (this.blogId) {
+    //   this._blogService.edit(this.blogId, fd).subscribe((data: any) => {
+    //     this.onSubmitCommon('Blog edited.');
 
-    if (this.blogId) {
-      this._blogService.edit(this.blogId, fd).subscribe((data: any) => {
-        this.onSubmitCommon('Blog edited.');
-
-      }, err => console.log(err));
-    } else {
-      this._blogService.newBlog(fd).subscribe((data: any) => {
-        this.onSubmitCommon('New blog saved.');
-      }, err => console.log(err));
-    }
+    //   }, err => console.log(err));
+    // } else {
+    //   // create new blog
+    //   this._blogService.newBlog(fd).subscribe((data: any) => {
+    //     this.onSubmitCommon('New blog saved.');
+    //   }, err => console.log(err));
+    // }
   }
 
   onSubmitCommon(msg) {
     this._flashMessagesService.show(msg, { cssClass: 'alert_success' });
     this.processing = false;
     this.formEnable();
-    this._router.navigate(['blogs']);
+    this._router.navigate(['']);
   }
 
   // back button
   goBack() {
-    this._router.navigate(['blogs']);
+    this._router.navigate(['']);
   }
 
 

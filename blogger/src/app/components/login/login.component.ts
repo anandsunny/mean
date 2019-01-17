@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
         this.msg = data.message;
         this._authService.storeUserData(data.token, data.user);
         setTimeout(() => {
-          this._router.navigate(['/profile']);
+          this._router.navigate(['/auth/profile']);
         }, 2000);
     },
     (err: HttpErrorResponse) => {

@@ -1,5 +1,6 @@
 const Blog = require('../models/blogs_m');
 const mongoose = require('mongoose');
+const User = require('../models/user_m');
 
 
 // create new blog
@@ -113,6 +114,67 @@ exports.edit = (req, res) => {
         })
     })
 
+}
+
+// users liked blog
+exports.liked = (req, res) => {
+
+    const blogId = req.body.blogId;
+    if(!blogId) {
+        res.status(204).json({success: false, message: 'no id was provided.'});
+    } else {
+        Blog.findById(blogId)
+        .exec()
+        .then((blog) => {
+            if(!blog) {
+                res.status(204).json({success: false, message: 'blog was not found.'});
+            } else {
+                User.findOne({_id: req.decode.userId})
+                .exec()
+                .then(user => {
+                    if(!user) {
+                        res.status(401).json({
+                            success: false,
+                            message: 'unauthorized user.'
+                        })
+                    } else {
+                       let userLiked = blog.likedBy.indexOf(user._id);
+                        
+                        if(userLiked < 0) {
+                            blog.likes++;
+                            blog.likedBy.push(user._id);
+                            blog.save()
+                            .then((liked) => {
+                                if(!liked) {
+                                    res.status(401).json({
+                                        success: false,
+                                        result: 'Unauthorized user.'
+                                    });
+                                } else {
+                                    res.status(200).json({
+                                        success: true,
+                                        result: 'Blog Liked.'
+
+                                    })
+                                }
+                            });
+                        } else {
+                            res.status(200).json({
+                                success: false,
+                                result: 'You already liked this post.'
+                            });
+                        }
+                    }
+                })
+            }
+        })
+        .catch(err => {
+            res.status(204).json({
+                success: false,
+                result: err
+            });
+        });
+    }
 }
 
 

@@ -5,6 +5,7 @@
 * { font-family: 'Montserrat', sans-serif; }
 
 a { text-decoration: none }
+img { width: 100%; }
 .heading { font-size: 54px; font-weight: 400; }
 
 .alert_success, .alert_danger {
@@ -15,8 +16,7 @@ a { text-decoration: none }
 }
 .alert_success { background: green; }
 .alert_danger { background: red; }
-.txt_danger { color: red }
-.txt_success { color: green }
+.text_danger { color: red }
 .err_ul {
     margin: 0; padding: 0;
     font-size: 15px;

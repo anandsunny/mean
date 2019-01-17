@@ -5,7 +5,6 @@
     <a routerLink="signUp" *ngIf="!this._authService.isLoggedIn()"  mat-button>Sign-Up</a>
     <a routerLink="auth/dashboard" *ngIf="this._authService.isLoggedIn()"  mat-button>Dashboard</a>
     <a routerLink="auth/profile" *ngIf="this._authService.isLoggedIn()" mat-button>Profile</a>
-    <a routerLink="blogs" *ngIf="this._authService.isLoggedIn()" mat-button>Blogs</a>
     <a (click)="logout()" *ngIf="this._authService.isLoggedIn()" mat-button>Log-Out</a>
   </div>
 </mat-toolbar>

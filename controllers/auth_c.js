@@ -31,11 +31,14 @@ exports.registration = (req, res) => {
         res.json({success: false, message: 'You must provide a Username'});
     } else if (!req.body.pass) {
         res.json({success: false, message: 'You must provide a Password'});
+    } else if (!req.file) {
+        res.json({success: false, message: 'You must provide a Profile Image'});
     } else {
         let user = new User({
             email: req.body.email.toLowerCase(),
             uname: req.body.uname.toLowerCase(),
-            pass: req.body.pass
+            pass: req.body.pass,
+            profile: req.file.filename
         });
         user.save((err) => {
             if(err) {

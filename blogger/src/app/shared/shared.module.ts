@@ -9,8 +9,6 @@ import { ReactiveFormsModule } from '@angular/forms';
   imports: [],
   exports: [
     CommonModule,
-    AppMaterialModule,
-    ReactiveFormsModule
   ]
 })
 export class SharedModule { }

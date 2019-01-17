@@ -4,6 +4,8 @@ const router = express.Router();
 const blogs_c = require('../controllers/blogs_c');
 const multer = require('multer');
 const path = require('path');
+const auth_check = require('../middlewares/check_auth');
+
 
 const storage = multer.diskStorage({
     destination : function(req, file, cd) {
@@ -47,6 +49,9 @@ router.get('/:blogId',  blogs_c.blog);
 
 // update blog by id
 router.patch('/:blogId', upload.single('blogImg'), blogs_c.edit);
+
+// blog like
+router.put('/liked', auth_check, blogs_c.liked);
 
 module.exports = router;
 

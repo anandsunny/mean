@@ -1,57 +1,56 @@
-<div id="create_blog">
-  <mat-card>
-    <form [formGroup]="myForm" (ngSubmit)="saveBlog()">
-      <mat-form-field class="ip_field">
-        <input matInput 
-        formControlName="title"
-        placeholder="Title"
-        (blur)="logValidationErrors()"
-         />
-      </mat-form-field>
-      <span class="txt_danger" *ngIf="formErrors.title">
-        {{ formErrors.title }}
-      </span>
-      
-      <mat-form-field class="ip_field">
-        <textarea matInput
-        cols="30" rows="10" 
-        formControlName="body"
-        placeholder="Blog Body"
-        (blur)="logValidationErrors()"
-        ></textarea>
-      </mat-form-field>
-      <span class="txt_danger" *ngIf="formErrors.body">
-        {{ formErrors.body }}
-      </span>
-      
-  
-      <div class="file_div">
-        <div class="file_div_inner">
-          <input class="hide" 
-        #blogImg formControlName="blogImg" 
-        type="file" id="cover" (change)="takeImg($event)" />
-        <button
-          type="button" 
-          [ngClass]="{'fileBtn': (serverImgPath || clientImgPath)}"
-          mat-stroked-button 
-          color="primary" 
-          (click)="blogImg.click()" >Choose Cover Image</button>
-        </div>
-        <div class="file_div_inner">
-          <!-- <img src="assets/noImage.png" width="100px" height="100px" *ngIf="blogImgName === ''" alt="image" /> -->
-          <img [src]="serverImgPath" width="100px" *ngIf="serverImgPath" height="100px"  alt="image" />
-          <img [src]="clientImgPath" width="100px" *ngIf="clientImgPath" height="100px"  alt="image" />
-        </div>
-      </div>
-        <span class="txt_danger" *ngIf="formErrors.blogImg">
-          {{ formErrors.blogImg }}
-        </span>
-        <br>
-          <button type="button"  mat-raised-button color="accent"  (click)="goBack()">Go Back</button> &nbsp;&nbsp;
-          <button type="submit" mat-raised-button color="primary" [disabled]="myForm.invalid" >Save</button>
-    </form>
-  </mat-card>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+      <mat-card>
+          <form [formGroup]="myForm" (ngSubmit)="saveBlog()">
+            <mat-form-field class="ip_field">
+              <input matInput 
+              formControlName="title"
+              placeholder="Title"
+              (blur)="logValidationErrors()"
+               />
+            </mat-form-field>
+            <span class="txt_danger" *ngIf="formErrors.title">
+              {{ formErrors.title }}
+            </span>
+            
+            <mat-form-field class="ip_field">
+              <textarea matInput
+              cols="30" rows="10" 
+              formControlName="body"
+              placeholder="Blog Body"
+              (blur)="logValidationErrors()"
+              ></textarea>
+            </mat-form-field>
+            <span class="txt_danger" *ngIf="formErrors.body">
+              {{ formErrors.body }}
+            </span>
+            
+            <div class="row">
+              <div class="col-xs-4">
+                  <input class="hide" #blogImg formControlName="blogImg" type="file" id="cover" (change)="takeImg($event)" />
+                  <button type="button" mat-stroked-button color="primary" (click)="blogImg.click()" >
+                    Choose Cover Image
+                  </button>
+              </div>
+              <div class="col-xs-4">
+                  <img [src]="serverImgPath" width="100px" *ngIf="serverImgPath" height="100px"  alt="image" />
+                  <img [src]="clientImgPath" width="100px" *ngIf="clientImgPath" height="100px"  alt="image" />
+              </div>
+              <div class="col-xs-4"></div>
+            </div>
+              <span class="txt_danger file_err" *ngIf="formErrors.blogImg">
+                {{ formErrors.blogImg }}
+              </span>
+              <br>
+                <button type="button"  mat-raised-button color="accent"  (click)="goBack()">Go Back</button> &nbsp;&nbsp;
+                <button type="submit" mat-raised-button color="primary" [disabled]="myForm.invalid" >Save</button>
+          </form>
+        </mat-card>
+  </div>
 </div>
+
+
 <table border="1">
   <thead>
     <tr><th>Status</th><th>Form</th><th>Control</th></tr>

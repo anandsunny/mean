@@ -1,92 +1,66 @@
 
-<div class="center-bx">
-  <div id="signUp-form">
-    <h2>Registration Form</h2>
+<div class="row">
+  <div class="col-md-6 col-md-offset-3" >
+    <mat-card>
+      <h2>Registration Form</h2>
     <div [ngClass]="msgClass" *ngIf="notif">
       {{ msg }}
     </div>
-    <form [formGroup]="myForm" (ngSubmit)="userSignUp()">
-      <div class="form_input">
+    <form [formGroup]="myForm" (ngSubmit)="userSignUp()" novalidate>
+      <div class="form-group">
         <mat-form-field class="ip_field" >
-          <input matInput 
-          formControlName="uname"
-          (blur)="checkUsername()"
-          placeholder="User-Name" />
+          <input matInput formControlName="uname" placeholder="User-Name" />
         </mat-form-field>
-        <!-- [ngClass]='{"border_danger": (myForm.controls.uname.errors && myForm.controls.uname.dirty) || (isValidUname && myForm.controls.uname.dirty)}' -->
-        <ul class="err_ul">
-          <li class="txt_danger" *ngIf='myForm.controls.uname.errors?.required && myForm.controls.uname.dirty'>
-            Username Required.
-          </li>
-          <li class="txt_danger" *ngIf='(myForm.controls.uname.errors?.minlength || myForm.controls.uname.errors?.maxlength) && myForm.controls.uname.dirty'>
-            Minimun 3 characters and Maximum 15 characters
-          </li>
-          <li class="txt_danger" *ngIf="myForm.controls.uname.errors?.validateUsername && myForm.controls.uname.dirty">
-            Username must not have any special characters
-          </li>
-          <li [ngClass]="isValidUnameClass" *ngIf="isValidUnameMsg">{{ isValidUnameMsg }}</li>
-        </ul>
+        <p class="text_danger" *ngIf="formErrors.uname">{{ formErrors.uname }}</p>
       </div>
-      <div class="form_input">
+      <div class="form-group">
         <mat-form-field class="ip_field">
-          <input type="email" matInput 
-          formControlName="email"
-          (blur)="checkEmail()"
-          placeholder="E-Mail" />
+          <input type="email" matInput formControlName="email" placeholder="E-Mail" />
         </mat-form-field>
-        <!-- [ngClass]="{'border_danger': (myForm.controls.email.errors && myForm.controls.email.dirty) || (isValidEmail && myForm.controls.email.dirty)}" -->
-        <ul class="err_ul">
-          <li class="txt_danger" *ngIf='myForm.controls.email.errors?.required && myForm.controls.email.dirty'>
-            E-mail Required.
-          </li>
-          <li class="txt_danger" *ngIf='(myForm.controls.email.errors?.minlength || myForm.controls.email.errors?.maxlength) && myForm.controls.email.dirty'>
-            Minimun 5 characters and Maximum 30 characters
-          </li>
-          <li class="txt_danger" *ngIf="myForm.controls.email.errors?.validateEmail && myForm.controls.email.dirty">
-            E-Mail must be valid.
-          </li>
-          <li [ngClass]="isValidEmailClass" *ngIf="isValidEmailMsg">{{ isValidEmailMsg }}</li>
-        </ul>
+        <p class="text_danger" *ngIf="formErrors.email">{{ formErrors.email }}</p>
       </div>
-      <div class="form_input">
-        <mat-form-field class="ip_field">
-          <input type="password" matInput 
-          formControlName="pass"
-          placeholder="Password" />
-        </mat-form-field>
-        <!-- [ngClass]="{'border_danger': (myForm.controls.pass.errors && myForm.controls.pass.dirty)}" -->
-        <ul class="err_ul">
-          <li class="txt_danger" *ngIf='myForm.controls.pass.errors?.required && myForm.controls.pass.dirty'>
-            Password Required.
-          </li>
-          <li class="txt_danger" *ngIf='(myForm.controls.pass.errors?.minlength || myForm.controls.pass.errors?.maxlength) && myForm.controls.pass.dirty'>
-            Minimun 8 characters and Maximum 35 characters
-          </li>
-          <li class="txt_danger" *ngIf="myForm.controls.pass.errors?.validatePassword && myForm.controls.pass.dirty">
-            Must have at least one uppercase, lowercase, special character and number.
-          </li>
-        </ul>
+      <div formGroupName="passGroup">
+        <div class="form-group">
+          <mat-form-field class="ip_field">
+            <input type="password" matInput formControlName="pass" placeholder="Password" />
+          </mat-form-field>
+          <p class="text_danger" *ngIf="formErrors.pass">{{ formErrors.pass }}</p>
+        </div>
+        <div class="form-group">
+          <mat-form-field class="ip_field">
+            <input type="password" matInput formControlName="cpass" placeholder="Confirm Password" />
+          </mat-form-field>
+          <p class="text_danger" *ngIf="formErrors.cpass">{{ formErrors.cpass }}</p>
+          <p class="text_danger" *ngIf="formErrors.passGroup">{{ formErrors.passGroup }}</p>
+        </div>
       </div>
-      <div class="form_input">
-        <mat-form-field class="ip_field">
-          <input type="password" matInput 
-          formControlName="cpass"
-          placeholder="Compare Password" />
-        </mat-form-field>
-        <!-- [ngClass]="{'border_danger': (myForm.controls.cpass.errors && myForm.controls.cpass.dirty)}" -->
-        <ul class="err_ul">
-          <li class="txt_danger" *ngIf='myForm.controls.cpass.errors?.required && myForm.controls.cpass.dirty'>
-            Confirm Password Required.
-          </li>
-          <li class="txt_danger" *ngIf="myForm.errors?.matchingPasswords && myForm.controls.cpass.dirty">
-            Confirm password didn't matched to Password.
-          </li>
-        </ul>
+      <div class="row">
+        <div class="col-xs-offset-3 col-xs-6">
+          <mat-card class="profile_card">
+              <img src="assets/person.png" *ngIf="!profilePath" width="200px" height="200px"  alt="image" />
+              <img [src]="profilePath" *ngIf="profilePath && (myForm.get('profile').errors?.validateFile === null)" width="200px" height="200px" alt="image" />
+              <input class="hide" #profile formControlName="profile" type="file" id="profile" (change)="takeProfile($event)" />
+              <button  type="button" mat-stroked-button color="primary" [disabled]="processing" (click)="profile.click()" class="upload_btn" >
+                Choose Profile Photo
+              </button>
+              <p class="text_danger" *ngIf="formErrors.profile">{{ formErrors.profile }}</p>
+          </mat-card>
+        </div>
+        <div class="col-xs-3">
+            
+        </div>
       </div>
+
+      <br>
+      <br>
+      <br>
       <div class="form_input">
-        <button type="submit" mat-raised-button color="primary" [disabled]="myForm.invalid || isValidUname || isValidEmail || processing" >Sign-Up</button>
+        <button mat-button color="primary" (click)="logValidationErrors()">get data</button>
+        <button type="submit" mat-raised-button color="primary" [disabled]="myForm.invalid || processing" >Sign-Up</button>
       </div>
     </form>
+    </mat-card>
 
   </div>
 </div>
+{{ myForm.get('profile').errors?.validateFile | json }}

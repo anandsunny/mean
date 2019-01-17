@@ -103,6 +103,7 @@ userSchema = new Schema({
     uname: { type: String, unique: true, required: true, lowercase: true, validate: unameValidators },
     email: { type: String, unique: true, required: true, lowercase: true, validate: emailValidators },
     pass: { type: String, required: true, validate: passValidators },
+    profile: { type: String, required: true}
 });
 
 userSchema.pre('save', function(next) {

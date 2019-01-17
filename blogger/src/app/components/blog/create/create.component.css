@@ -1,7 +1,4 @@
-#create_blog {
-    width: 50%;
-    margin: 25px auto;
-}
+
 
 .ip_field { width: 100%; }
 
@@ -14,6 +11,8 @@
 .file_div .file_div_inner > img {
     padding-left: 30px;
 }
-.fileBtn {
-    transform: translateY(-54px);
+
+.file_err {
+    margin-bottom: 20px;
+    display: inline-block;
 }

@@ -49,4 +49,9 @@ export class BlogService {
   delete(table, field, field_value) {
     return this._httpClient.delete(`${this._authService.rootUrl}common/${table}/${field}/${field_value}`);
   }
+
+  // likes
+  liked(blogId){
+    return this._httpClient.put(`${this._authService.rootUrl}blogs/liked`, {blogId: blogId}, {headers: this._authService.headers});
+  }
 }

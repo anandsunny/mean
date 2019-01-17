@@ -13,9 +13,15 @@ import { NotAuthGuard } from './guards/not-auth.guard';
 import { BlogComponent } from './components/blog/blog.component';
 import { CreateComponent } from './components/blog/create/create.component';
 import { SingleBlogComponent } from './components/blog/single-blog/single-blog.component';
+import { BlogListResolverService } from './services/blog-list-resolver.service';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent, pathMatch: 'full' },
+  { path: '', component: HomeComponent, resolve: {blogList: BlogListResolverService} ,pathMatch: 'full' },
+  { path: 'blog', children: [
+    { path: 'create', component: CreateComponent, canActivate: [AuthGuard] },
+    {path: ':id', component: SingleBlogComponent },
+    { path: 'edit/:id', component: CreateComponent, canActivate: [AuthGuard] }
+  ]},
   { path: 'login', component: LoginComponent, canActivate: [NotAuthGuard] },
   { path: 'signUp', component: RegisterComponent, canActivate: [NotAuthGuard] },
   { path: 'auth', loadChildren: './modules/auth/auth.module#AuthModule' },

@@ -10,7 +10,6 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { FlashMessagesModule } from 'angular2-flash-messages';
 
 
-
 // components
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
@@ -21,13 +20,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { LayoutModule } from '@angular/cdk/layout';
-
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 // directives 
-import { BlogModule } from './components/blog/blog.module';
+// import { BlogModule } from './components/blog/blog.module';
 import { SharedModule } from './shared/shared.module';
 import { HeaderComponent } from './components/inc/header/header.component';
 import { NavbarComponent } from './components/inc/header/navbar/navbar.component';
+import { BlogComponent } from './components/blog/blog.component';
+import { CreateComponent } from './components/blog/create/create.component';
+import { SingleBlogComponent } from './components/blog/single-blog/single-blog.component';
 
 // get token
 export function tokenGetter(): string {
@@ -40,13 +42,15 @@ export function tokenGetter(): string {
     HeaderComponent,
     NavbarComponent,
     HomeComponent,
+    BlogComponent,
+    SingleBlogComponent,
+    CreateComponent,
     LoginComponent,
     RegisterComponent,
     NotFoundComponent,
   ],
   imports: [
     BrowserModule,
-    BlogModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     AppMaterialModule,
@@ -60,8 +64,7 @@ export function tokenGetter(): string {
       }
     }),
     LayoutModule,
-    SharedModule,
-    
+    DragDropModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -8,8 +8,9 @@ import { BlogListResolverService } from '../../services/blog-list-resolver.servi
 
 const routes: Routes = [
   { path: 'blogs', children: [
-    { path: '', component: BlogComponent, resolve: {blogList: BlogListResolverService}} ,
+    { path: '', component: BlogComponent, resolve: {blogList: BlogListResolverService}},
     { path: 'create', component: CreateComponent, canActivate: [AuthGuard] },
+    {path: ':id', component: SingleBlogComponent },
     { path: 'edit/:id', component: CreateComponent, canActivate: [AuthGuard] }
   ]}
 ];

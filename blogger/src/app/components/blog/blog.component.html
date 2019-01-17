@@ -1,14 +1,32 @@
 
-<a mat-raised-button [routerLink]="['create']" color="primary" >
+<a mat-raised-button (click)="create()" color="primary" *ngIf="userName">
   <mat-icon>add_circle_outline</mat-icon> Create New</a>
-
-<div class="row">
-  <app-blog-tile></app-blog-tile>
-</div>
-
-
-<!-- <mat-grid-list cols="3" >
-  <mat-grid-tile class="blog_tiles" colspan="1" >
-
-  </mat-grid-tile>
-</mat-grid-list> -->
+  <div class="row">
+      <div class="col-md-4" *ngFor="let blog of blogList; trackBy:trackBlogLike">
+          <mat-card class="example-card">
+            <mat-card-header>
+              <div mat-card-avatar class="example-header-image"></div>
+              <mat-card-title>{{ blog.createdBy | titlecase }}</mat-card-title>
+              <mat-card-subtitle>{{ blog.createdAt | date : 'dd LLL' }}</mat-card-subtitle>
+            </mat-card-header>
+            <img mat-card-image  *ngIf="blog.blogImg;" class="blogImg" [src]="'http://localhost:3000/img/'+blog.blogImg" alt="Blog Image" />
+            <img mat-card-image *ngIf="!blog.blogImg;" class="blogImg" src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+            <mat-card-content (click)="reachSigleBlog(blog._id)" class="jump_link">
+              <h3>{{ (blog.title.length > 30) ? (blog.title | slice:0:30)+'...' : (blog.title) }}</h3>
+            </mat-card-content>
+            <mat-card-actions class="mat_action">
+              <button mat-icon-button (click)="like(blog._id)" color="warn" [matBadge]="blog.likes ? blog.likes : ''" matBadgePosition="after" matBadgeColor="accent">
+                <mat-icon aria-label="Example icon-button with a heart icon">{{ blog.likedBy.indexOf(userId) > -1 ? 'favorite' : 'favorite_border' }}</mat-icon>
+              </button>
+              <span class="authButtons">
+                <button mat-icon-button color="accent" (click)="edit(blog._id)">
+                  <mat-icon *ngIf="userName === blog.createdBy">create</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="delete(blog._id)">
+                  <mat-icon *ngIf="userName === blog.createdBy">delete</mat-icon>
+                </button>
+              </span>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+  </div>

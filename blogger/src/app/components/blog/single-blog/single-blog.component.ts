@@ -19,6 +19,7 @@ export class SingleBlogComponent implements OnInit {
   createdBy: String;
   user: Object = {};
   uname: Object = {};
+  disableBtn: boolean = false;
 
   constructor(
     private _router: Router,
@@ -57,6 +58,22 @@ export class SingleBlogComponent implements OnInit {
       this._flashMessagesService.show(`${err.error.message}`, {cssClass: 'txt_danger'});
     });
     this.uname = JSON.parse(localStorage.getItem('user'));
+  }
+
+
+  edit() {
+    this._router.navigate(['blogs/edit', this.blogId]);
+  }
+
+  delete() {
+    if(confirm('Do you want to delete this blog?')) {
+      this.disableBtn = true;
+      this._blogService.delete('blog', '_id', this.blogId).subscribe((res: any) => {
+        this._flashMessagesService.show('Blog deleted.', { cssClass: 'alert_success'});
+        this.disableBtn = false;
+        this._router.navigate(['blogs']);
+      }, err => console.log(err));
+    }
   }
 
 }

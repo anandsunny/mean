@@ -3,6 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from '../interfaces/user';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -29,7 +31,7 @@ export class AuthService {
   }
 
   // new user registration
-  userRegistration(user: User){
+  userRegistration(user){
     return this._http.post(`${this.rootUrl}auth/register`, user);
   }
 
@@ -78,5 +80,7 @@ export class AuthService {
     this.user = null;
     localStorage.clear();
   }
+
+
 
 }
